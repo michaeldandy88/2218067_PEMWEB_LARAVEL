@@ -1,0 +1,116 @@
+.modal-container {
+    display: none; /* Hide modals by default */
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgb(0,0,0);
+    background-color: rgba(0,0,0,0.4);
+    align-items: center;
+    justify-content: center;
+}
+
+.modal-dialog {
+    background-color: #fff;
+    margin: auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%;
+}
+
+.modal-content {
+    background-color: #fefefe;
+    margin: 15px;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%;
+}
+
+.modal-header,
+.modal-body,
+.modal-footer {
+    padding: 10px;
+}
+
+.btn-close {
+    background: none;
+    border: none;
+    font-size: 1.5em;
+    color: #aaa;
+    cursor: pointer;
+}
+
+.btn-close:hover,
+.btn-close:focus {
+    color: #000;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+/* style card-categories */
+
+.cards-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    padding: 20px;
+}
+
+.card {
+    width: 250px;
+    margin: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    overflow: hidden;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    background-color: #fff;
+}
+
+.card-image {
+    width: 100%;
+    height: 150px;
+    overflow: hidden;
+}
+
+.card-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.card-content {
+    padding: 15px;
+}
+
+.card-content h5 {
+    margin-bottom: 5px;
+    font-weight: bold;
+    color: #333;
+}
+
+.card-content .Jenis {
+    margin-bottom: 5px;
+    color: #666;
+}
+
+.card-content .Harga {
+    margin-bottom: 10px;
+    font-weight: bold;
+    color: #007bff;
+}
+
+.btn_belanja {
+    background-color: #F2613F;
+    color: #fff;
+    padding: 8px 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.btn_belanja:hover {
+    background-color: #A34343;
+}
