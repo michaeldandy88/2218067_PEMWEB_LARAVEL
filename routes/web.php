@@ -2,6 +2,9 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\jenisrokokController;
+use App\Http\Controllers\transaksirokokController;
+use App\Http\Controllers\WelcomeController;
+use App\Http\Controllers\shopController;
 
 /*
 |--------------------------------------------------------------------------
@@ -23,3 +26,7 @@ Route::get('/shop', function () {
 })->name('shop');
 
 Route::resource('/jenisrokok', \App\Http\Controllers\jenisrokokController::class);
+Route::resource('/transaksi', \App\Http\Controllers\transaksirokokController::class)->except(['show']);
+Route::post('/Order', [ShopController::class, 'CreateTransaction'])->name('transaksirokok');
+Route::get('/', [ShopController::class, 'index']);
+Route::get('/transaksi/transaksi-cetak', [transaksirokokController::class, 'cetak'])->name('transaksi.cetak');

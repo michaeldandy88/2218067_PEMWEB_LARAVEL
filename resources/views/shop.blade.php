@@ -4,8 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PenjualanRokok</title>
-    <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="styleshop/styleshop.css">
+    <link rel="stylesheet" href="{{ asset('css/style.css') }}" />
+    <link rel="stylesheet" href="{{ asset('styleshop/styleshop.css') }}" />
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 </head>
 <body>
@@ -14,156 +14,140 @@
             <div class="logo"><a href=''>WarungRokok.</a></div>
             <div class="menu">
                 <ul>
-                    <li><a href="index.php">Beranda</a></li>
-                    <li><a href="login.php">Login</a></li>
-                    <li><a href="shop.php">Shop</a></li>
-                    <li><a href="register.php" class="button1">Register</a></li>
+                    <li><a href="{{ url('/') }}">Beranda</a></li>
+                    <li><a href="{{ url('/login') }}">Login</a></li>
+                    <li><a href="{{ url('/shop') }}">Shop</a></li>
+                    <li><a href="{{ url('/register') }}" class="button1">Register</a></li>
                 </ul>
             </div>
+        </div>
     </nav>
-<div class="cards-categories">
-    <div class="card-categories">
-        <?php
-        include 'koneksi.php';
-        $sql = "SELECT * FROM jenis_rokok";
-        $result = mysqli_query($koneksi, $sql);
-        if (mysqli_num_rows($result) == 0) {
-            echo "<h3 style='text-align: center; color: red;'>Data Kosong</h3>";
-        }
-        while ($data = mysqli_fetch_assoc($result)) {
-            echo "
-            <div class='card'>
-                <div class='card-image'>
-                    <img src='foto/$data[Gambar]' alt='tidak ada gambar' />
-                </div>
-                <div class='card-content'>
-                    <h5>$data[Nama]</h5>
-                    <p class='Jenis'>$data[Jenis]</p>
-                    <p class='Harga'> $data[Harga] </p>
-                    <button class='btn_belanja' type='submit' onclick='bukaModal($data[ID_Jenis])'>Beli</button>
-                </div>
-            </div>";
-        }
-        ?>
-    </div>
-</div>
-<!--  Modal -->
-<div id="myModal" class="modal-container" onclick="tutupModal()">
-    <div class="modal-dialog" onclick="event.stopPropagation()">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h1 class="modal-title " style="color: #A34343;">Jumlah Beli</h1>
-            </div>
-            <div class="modal-body">
-                <form>
-                    <input type="hidden" name="jenis_rokok_ID_Jenis" id="Nama_id" value="">
-                    <input type="hidden" name="jenis_rokok_Nama" id="Nama_name" value="">
-                    <input type="hidden" name="Harga" id="Harga" value="">
-                    <div class="form-group">
-                        <label class="labelmodal" for="recipient-jumlah" class="col-form-label">Jumlah :</label>
-                        <input class="inputdata" type="number" class="form-control" id="recipient-jumlah">
+    <div class="cards-categories">
+        <h2>Pilih Rokok</h2>
+        <div class="card-categories">
+            @if (!isset($jenirokoks) || count($jenirokoks) == 0)
+                <h3 style="text-align: center; color: red;">Data Kosong</h3>
+            @else
+                @foreach ($jenirokoks as $data)
+                    <div class="card">
+                        <div class="card-image">
+                            <img src="{{ asset('foto/' . $data->gambar) }}" alt="tidak ada gambar" />
+                        </div>
+                        <div class="card-content">
+                            <h5>{{ $data->nama }}</h5>
+                            <p class="jumlah">{{ $data->jumlah }}</p>
+                            <button class="btn_belanja" type="button" onclick='bukaModal({{ $data->id_jenis }})'>Beli</button>
+                        </div>
                     </div>
-                </form>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" onclick="tutupModal()">Keluar</button>
-                <button type="button" class="btn btn-yellow" onclick="bukaModal2()">Lanjutkan</button>
-            </div>
-        </div>
-    </div>
-</div>
-<!-- Modal 2 -->
-<div id="myModal2" class="modal-container" onclick="tutupModal2()">
-    <div class="modal-dialog" onclick="event.stopPropagation()">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h1 class="modal-title" style="color:  #A34343;">Data Transaksi</h1>
-                <button type="button" class="btn-close" aria-label="Close" onclick="tutupModal2()"></button>
-            </div>
-            <form action="prosestransaksi.php" method="post">
-                <div class="modal-body">
-                    <h4> Nama Rokok</h4>
-                    <div class="form-group">
-                        <label class="labelmodal" for="detail-namarokok" class="col-form-label">rokok :</label>
-                        <input class="inputdata" type="text" name="detail-namarokok" class="form-control"
-                            id="detail-namarokok" readonly>
-                    </div>
-                    <div class="form-group">
-                        <label class="labelmodal" for="detail-harga" class="col-form-label">Harga :</label>
-                        <input class="inputdata" type="text" name="detail-harga" class="form-control"
-                            id="detail-harga" readonly>
-                    </div>
-                    <h4>Jumlah Beli</h4>
-                    <div class="form-group">
-                        <label class="labelmodal" for="detail-jumlah" class="col-form-label">Jumlah :</label>
-                        <input class="inputdata" name="detail-jumlah" type="text" class="form-control"
-                            id="detail-jumlah" readonly>
-                    </div>
-                    <input type="hidden" name="detail-Status" value="Pending">
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" onclick="kembaliKeModalPertama()">Kembali</button>
-                    <button name="simpan" type="submit" class="btn btn-yellow">Lakukan Pembayaran</button>
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
-</main>
-</div>
-<script>
-var selectedJenisRokokId;
-// Fungsi Modal
-function bukaModal(ID_Jenis) {
-    console.log('ID_Jenis:', ID_Jenis);
-    selectedJenisRokokId = ID_Jenis;
-    var xhr = new XMLHttpRequest();
-    xhr.onreadystatechange = function() {
-        if (xhr.readyState == 4 && xhr.status == 200) {
-            var NamaData = JSON.parse(xhr.responseText);
 
-            // Perbarui input tersembunyi
-            document.getElementById('Nama_id').value = ID_Jenis;
-            document.getElementById('Nama_name').value = NamaData.Nama;
-            document.getElementById('Harga').value = NamaData.Harga;
-            document.getElementById("myModal").style.display = "flex";
+                    <!-- Modal 1 -->
+                    <div id="myModal{{ $data->id_jenis }}" class="modal-container" onclick="tutupModal({{ $data->id_jenis }})">
+                        <div class="modal-dialog" onclick="event.stopPropagation()">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h1 class="modal-title" style="color: #ffb72b;">Formulir Pembayaran</h1>
+                                    <button type="button" class="btn-close" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <form>
+                                        <input type="hidden" name="jenisrokok_id" id="jenisrokok_id" value="{{ $data->id_jenis }}">
+                                        <div class="form-group">
+                                            <label class="labelmodal" for="recipient-jumlah">Jumlah :</label>
+                                            <input class="inputdata" type="number" name="recipient-jumlah" class="form-control" id="recipient-jumlah">
+                                        </div>
+                                    </form>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" onclick="tutupModal({{ $data->id_jenis }})">Keluar</button>
+                                    <button type="button" class="btn btn-yellow" onclick="bukaModal2({{ $data->id_jenis }})">Lanjutkan</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Modal 2 -->
+                    <div id="myModal2{{ $data->id_jenis }}" class="modal-container" onclick="tutupModal2({{ $data->id_jenis }})">
+                        <div class="modal-dialog" onclick="event.stopPropagation()">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h1 class="modal-title" style="color: #ffb72b;">Data Transaksi</h1>
+                                    <button type="button" class="btn-close" aria-label="Close" onclick="tutupModal2({{ $data->id_jenis }})"></button>
+                                </div>
+                                <form action="{{ route('transaksirokok') }}" method="post">
+                                    @csrf
+                                    <div class="modal-body">
+                                        <h4>Kategori</h4>
+                                        <div class="form-group">
+                                            <input type="hidden" name="id_jenis" value="{{ $data->id_jenis }}">
+                                            <label class="labelmodal" for="detail-kategori">Kategori :</label>
+                                            <input class="inputdata" type="text" name="detail-kategori" class="form-control" id="detail-kategori" value="{{ $data->nama }}">
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="labelmodal" for="detail-jenis">Jenis Rokok :</label>
+                                            <input class="inputdata" type="text" name="detail-jenis" class="form-control" id="detail-jenis" value="{{ $data->jenis }}" readonly>
+                                        </div>
+                                        <h4>Jumlah Beli</h4>
+                                        <div class="form-group">
+                                            <label class="labelmodal" for="recipient-jumlah">Jumlah Beli :</label>
+                                            <input class="inputdata" name="recipient-jumlah" type="text" class="form-control" id="recipient-jumlah" readonly>
+                                            @error('recipient-jumlah')
+                                                <p style="font-size: 10px; color: red">{{ $message }}</p>
+                                            @enderror
+                                        </div>
+                                        <input type="hidden" name="status" value="success">
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" onclick="kembaliKeModalPertama({{ $data->id_jenis }})">Kembali</button>
+                                        <button name="simpan" type="submit" class="btn btn-yellow">Lakukan Pembayaran</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                @endforeach
+            @endif
+        </div>
+    </div>
+
+    <script>
+    function bukaModal(jenisrokokId) {
+        var modal = document.getElementById('myModal' + jenisrokokId);
+        modal.style.display = 'flex';
+    }
+
+    function tutupModal(jenisrokokId) {
+        var modal = document.getElementById('myModal' + jenisrokokId);
+        modal.style.display = 'none';
+    }
+
+    function bukaModal2(jenisrokokId) {
+        tutupModal(jenisrokokId); // Tutup modal pertama
+        var modal2 = document.getElementById('myModal2' + jenisrokokId);
+        modal2.style.display = 'flex';
+
+        // Ambil nilai dari input fields pada modal pertama
+        var modal1 = document.getElementById('myModal' + jenisrokokId);
+        var jumlah = modal1.querySelector("#recipient-jumlah").value;
+
+        // Set nilai pada modal kedua
+        modal2.querySelector("#recipient-jumlah").value = jumlah;
+    }
+
+    function tutupModal2(jenisrokokId) {
+        var modal2 = document.getElementById('myModal2' + jenisrokokId);
+        modal2.style.display = 'none';
+    }
+
+    function kembaliKeModalPertama(jenisrokokId) {
+        tutupModal2(jenisrokokId);
+        bukaModal(jenisrokokId);
+    }
+
+    window.onclick = function(event) {
+        if (event.target.classList.contains('modal-container')) {
+            event.target.style.display = 'none';
         }
     };
-    xhr.open("GET", "ambilkategori.php?ID_Jenis=" + ID_Jenis, true);
-    xhr.send();
-}
-
-function tutupModal() {
-    document.getElementById("myModal").style.display = "none";
-}
-
-function tutupModal2() {
-    document.getElementById("myModal2").style.display = "none";
-}
-
-function bukaModal2() {
-    tutupModal(); // Tutup modal pertama
-    document.getElementById("myModal2").style.display = "flex";
-
-    var jumlah = document.getElementById("recipient-jumlah").value;
-    // kategori
-    var nama = document.getElementById("Nama_name").value;
-    var harga = document.getElementById("Harga").value;
-
-    document.getElementById("detail-jumlah").value = jumlah;
-    document.getElementById("detail-namarokok").value = nama;
-    document.getElementById("detail-harga").value = harga;
-}
-
-function kembaliKeModalPertama() {
-    tutupModal2();
-    bukaModal(selectedJenisRokokId);
-}
-
-function lakukanPembayaran() {
-    alert("Pembayaran berhasil!");
-    tutupModal2();
-    document.getElementById("recipient-jumlah").value = ''; // Clear input
-}
-</script>
+    </script>
 </body>
 </html>

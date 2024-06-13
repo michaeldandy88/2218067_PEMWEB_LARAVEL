@@ -13,4 +13,9 @@ class jenirokok extends Model
     public $incrementing = true;
     protected $fillable = ['nama', 'isi', 'jenis','gambar'];
     public $timestamps = false;
+
+    public function transaksirokok()
+    {
+        return $this->hasMany(Transaksirokok::class, 'jenisrokok_id');
+    }   
 }
